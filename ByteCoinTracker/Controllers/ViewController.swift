@@ -8,19 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController,UIPickerViewDataSource, UIPickerViewDelegate, CoinManagerDelegate {
-    
-    func didUpdateCoinPrice(price: String, currency: String) {
-        DispatchQueue.main.async {
-            self.priceLabel.text = price
-            self.currencyLabel.text = currency
-        }
-    }
-    
-    func didFailWithError(error: Error) {
-        print(error)
-    }
-    
+class ViewController: UIViewController {
     
     var coinManeger = CoinManager()
     
@@ -36,7 +24,9 @@ class ViewController: UIViewController,UIPickerViewDataSource, UIPickerViewDeleg
         coinManeger.delegate = self
         // Do any additional setup after loading the view.
     }
+}
 
+extension ViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -54,6 +44,23 @@ class ViewController: UIViewController,UIPickerViewDataSource, UIPickerViewDeleg
         let selectedCurrency = coinManeger.currencyArray[row]
         coinManeger.getCoinPrice(currency: selectedCurrency)
     }
-
+    
 }
+
+extension ViewController: CoinManagerDelegate {
+    
+    func didUpdateCoinPrice(price: String, currency: String) {
+        DispatchQueue.main.async {
+            self.priceLabel.text = price
+            self.currencyLabel.text = currency
+        }
+    }
+    
+    func didFailWithError(error: Error) {
+        print(error)
+    }
+    
+}
+
+
 
